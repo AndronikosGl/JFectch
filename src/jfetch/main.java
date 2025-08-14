@@ -51,6 +51,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.prefs.Preferences;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -63,6 +64,7 @@ public final class main extends javax.swing.JFrame {
 
     JFrame reference;
     boolean theme = false; //Theme
+    Preferences prefs = Preferences.userNodeForPackage(main.class);
     Icon dark = new ImageIcon(main.class.getResource("dark.png"));
     Icon light = new ImageIcon(main.class.getResource("light.png"));
     Icon darkh = new ImageIcon(main.class.getResource("hoverdark.png"));
@@ -76,28 +78,30 @@ public final class main extends javax.swing.JFrame {
      * Creates new form main
      */
     public static void ConfigurePictureBoxWH(JLabel Label, String ResourceName, String Quality, int w, int h, boolean Remove_label_text) {
-         if (Remove_label_text == false){
-           Label.setText(""); // Να μην εμποδιζει την εικονα το κειμενο σε περιπτωση που θελλω να το εχω σαν picture element   
-          }
-         ImageIcon icon = new ImageIcon(main.class.getResource(ResourceName));
-         Image scaledImage = icon.getImage().getScaledInstance(w,h, Image.SCALE_DEFAULT);
-    switch (Quality) {
-        case "SMOOTH":
-            scaledImage = icon.getImage().getScaledInstance(w,h, Image.SCALE_SMOOTH);
-            break;
-        case "FAST":
-            scaledImage = icon.getImage().getScaledInstance(w,h, Image.SCALE_FAST);   
-            break;
-        case "AREA_AVERAGING":
-            scaledImage = icon.getImage().getScaledInstance(w,h, Image.SCALE_AREA_AVERAGING);;      
-            break;
-        default:
-            scaledImage = icon.getImage().getScaledInstance(w,h, Image.SCALE_DEFAULT);
-            break;
-    }
+        if (Remove_label_text == false) {
+            Label.setText(""); // Να μην εμποδιζει την εικονα το κειμενο σε περιπτωση που θελλω να το εχω σαν picture element   
+        }
+        ImageIcon icon = new ImageIcon(main.class.getResource(ResourceName));
+        Image scaledImage = icon.getImage().getScaledInstance(w, h, Image.SCALE_DEFAULT);
+        switch (Quality) {
+            case "SMOOTH":
+                scaledImage = icon.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH);
+                break;
+            case "FAST":
+                scaledImage = icon.getImage().getScaledInstance(w, h, Image.SCALE_FAST);
+                break;
+            case "AREA_AVERAGING":
+                scaledImage = icon.getImage().getScaledInstance(w, h, Image.SCALE_AREA_AVERAGING);
+                ;
+                break;
+            default:
+                scaledImage = icon.getImage().getScaledInstance(w, h, Image.SCALE_DEFAULT);
+                break;
+        }
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
         Label.setIcon(scaledIcon);
     }
+
     public void setDistroLogo() throws IOException {
         String osname;
         Process proc;
@@ -115,6 +119,8 @@ public final class main extends javax.swing.JFrame {
                 logo.setIcon(new ImageIcon(main.class.getResource("distrologos/archcraft.png")));
             } else if (osname.toLowerCase().contains("blackarch")) {
                 logo.setIcon(new ImageIcon(main.class.getResource("distrologos/blackarch.png")));
+            } else if (osname.toLowerCase().contains("arch")) {
+                logo.setIcon(new ImageIcon(main.class.getResource("distrologos/arch.png")));
             } else if (osname.toLowerCase().contains("cent")) {
                 logo.setIcon(new ImageIcon(main.class.getResource("distrologos/cent.png")));
             } else if (osname.toLowerCase().contains("deepin")) {
@@ -156,14 +162,13 @@ public final class main extends javax.swing.JFrame {
             } else if (osname.toLowerCase().contains("peppermint")) {
                 logo.setIcon(new ImageIcon(main.class.getResource("distrologos/pepermint.png")));
             } else if (osname.toLowerCase().contains("pop")) {
-                logo.setIcon(new ImageIcon(main.class.getResource("distrologos/pop.png")));
+                logo.setIcon(new ImageIcon(main.class.getResource("distrologos/popos.png")));
             } else if (osname.toLowerCase().contains("puppy")) {
                 logo.setIcon(new ImageIcon(main.class.getResource("distrologos/puppy.png")));
             } else if (osname.toLowerCase().contains("raspberry") || osname.toLowerCase().contains("raspbian")) {
                 logo.setIcon(new ImageIcon(main.class.getResource("distrologos/rasbian.png")));
             } else if (osname.toLowerCase().contains("redhat")) {
                 logo.setIcon(new ImageIcon(main.class.getResource("distrologos/redhat.png")));
-
             } else if (osname.toLowerCase().contains("slackware")) {
                 logo.setIcon(new ImageIcon(main.class.getResource("distrologos/slackware.png")));
             } else if (osname.toLowerCase().contains("suse")) {
@@ -202,7 +207,7 @@ public final class main extends javax.swing.JFrame {
     }
 
     public String[] ReturnInfo() throws IOException, MalformedObjectNameException, MBeanException, AttributeNotFoundException, InstanceNotFoundException, ReflectionException {
-        
+
         String[] info = new String[9];
         Process proc = Runtime.getRuntime().exec("uname -r");
         BufferedReader buff = new BufferedReader(new InputStreamReader(proc.getInputStream()));
@@ -243,20 +248,20 @@ public final class main extends javax.swing.JFrame {
             BufferedReader buff2 = new BufferedReader(new InputStreamReader(cpu.getInputStream()));
             info[6] = buff2.readLine();
             //sysctl -n kern.boottime | sed -n 's/.*sec = \([0-9]*\).*/\1/p'
-            
+
             info[7] = "NaN";
 
-        }else if((System.getProperty("os.name").toLowerCase().contains("sunos")) || (System.getProperty("os.name").toLowerCase().contains("solaris"))){
+        } else if ((System.getProperty("os.name").toLowerCase().contains("sunos")) || (System.getProperty("os.name").toLowerCase().contains("solaris"))) {
             Process cpu = Runtime.getRuntime().exec("isalist");
             BufferedReader buff2 = new BufferedReader(new InputStreamReader(cpu.getInputStream()));
             String out = buff2.readLine();
-            if(out.length()>34){
-                info[6]=out.substring(0, 31)+"...";
-            }else{
-                info[6]=out;
+            if (out.length() > 34) {
+                info[6] = out.substring(0, 31) + "...";
+            } else {
+                info[6] = out;
             }
             info[7] = "NaN";
-        }else {
+        } else {
             JOptionPane.showMessageDialog(main.this, "JFetch is only supported on linux, BSD and Solaris systems", "Unsupported OS", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
@@ -269,7 +274,7 @@ public final class main extends javax.swing.JFrame {
         int total = (int) Math.ceil((data.getTotalSpace() / (1024.0 * 1024 * 1024)));
         int used = total - free;
         int percentUsed = (int) Math.round((used / (double) total) * 100);
-        info[8] = String.valueOf(free) + "GB/" + String.valueOf(total) + "GB ("+percentUsed+"% full)";
+        info[8] = String.valueOf(free) + "GB/" + String.valueOf(total) + "GB (" + percentUsed + "% full)";
         return info;
     }
 
@@ -279,7 +284,30 @@ public final class main extends javax.swing.JFrame {
 
     public main() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException, IOException, MalformedObjectNameException, MBeanException, AttributeNotFoundException, InstanceNotFoundException, ReflectionException, FontFormatException {
         initComponents();
+        theme = prefs.getBoolean("isdark", false);
         getContentPane().setBackground(new Color(242, 242, 242));
+        if (theme == true) {
+            HoverEffect.setIcon(darkh);
+            HoverEffect2.setIcon(darkh);
+            Colorbar.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+            Content.setForeground(Color.WHITE);
+            uptime.setIcon(new ImageIcon(main.class.getResource("uptime-dark.png")));
+            copy.setIcon(new ImageIcon(main.class.getResource("screenshot-dark.png")));
+            uptime.setForeground(Color.white);
+            getContentPane().setBackground(new Color(34, 34, 34));
+            tbi.setIcon(light);
+
+        } else {
+            HoverEffect.setIcon(lighth);
+            HoverEffect2.setIcon(lighth);
+            Colorbar.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            Content.setForeground(Color.BLACK);
+            uptime.setIcon(new ImageIcon(main.class.getResource("uptime.png")));
+            copy.setIcon(new ImageIcon(main.class.getResource("screenshot-light.png")));
+            uptime.setForeground(Color.black);
+            getContentPane().setBackground(new Color(244, 244, 244));
+            tbi.setIcon(dark);
+        }
         setSize(617, 390);
         this.setIconImage(new ImageIcon(main.class.getResource("icon.png")).getImage());
         setDistroLogo();
@@ -318,11 +346,11 @@ public final class main extends javax.swing.JFrame {
                 }
                 if (i <= 3) {
                     if (i % 2 == 1) {
-                               uptime.setText("<html>"
+                        uptime.setText("<html>"
                                 + "<span style='font-family:\"" + seg7ttf.getFontName() + "\"; font-size:20pt;'>"
                                 + bootdur + " 5E</span>"
                                 + "<span style='font-family:\"" + seg14ttf.getFontName() + "\"; font-size:20pt;'>C</span>"
-                                + "</html>"); 
+                                + "</html>");
                         uptime.repaint();
                     } else {
                         uptime.setText("");
@@ -342,14 +370,14 @@ public final class main extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    if(ReturnInfo()[7].equals("NaN")){
+                    if (ReturnInfo()[7].equals("NaN")) {
                         uptime.setText("<html>"
                                 + "<span style='font-family:\"" + "sans-serif" + "\"; font-size:14pt; font-weight:bold;'>"
                                 + "&nbsp;&nbsp;Unavailable" + " </span>"
                                 + "<span style='font-family:\"" + seg14ttf.getFontName() + "\"; font-size:20pt;'></span>"
-                                        + "</html>");
+                                + "</html>");
                         ((Timer) e.getSource()).stop();
-                    }else{
+                    } else {
                         if (i <= bootdur) {
                             if (String.valueOf(i).startsWith("1")) {
                                 uptime.setIconTextGap(-3); // tweak this as needed
@@ -359,8 +387,8 @@ public final class main extends javax.swing.JFrame {
                             uptime.setText("<html>"
                                     + "<span style='font-family:\"" + seg7ttf.getFontName() + "\"; font-size:20pt;'>"
                                     + i + " 5E</span>"
-                                            + "<span style='font-family:\"" + seg14ttf.getFontName() + "\"; font-size:20pt;'>C</span>"
-                                                    + "</html>");
+                                    + "<span style='font-family:\"" + seg14ttf.getFontName() + "\"; font-size:20pt;'>C</span>"
+                                    + "</html>");
                             uptime.repaint();
                             if (bootdur <= 24) {
                                 i++;
@@ -371,10 +399,10 @@ public final class main extends javax.swing.JFrame {
                             } else {
                                 i = bootdur;
                             }
-                            
+
                         } else {
                             aniend.start();
-                            
+
                             ((Timer) e.getSource()).stop();
                         }
                     }
@@ -393,6 +421,7 @@ public final class main extends javax.swing.JFrame {
                 }
             }
         }).start();
+
     }
 
     /**
@@ -543,6 +572,8 @@ public final class main extends javax.swing.JFrame {
                     repeatlock = false;
 
                 }
+             
+                prefs.putBoolean("isdark", true);
                 Colorbar.setBorder(BorderFactory.createLineBorder(Color.WHITE));
                 Content.setForeground(Color.WHITE);
                 uptime.setIcon(new ImageIcon(main.class.getResource("uptime-dark.png")));
@@ -570,6 +601,8 @@ public final class main extends javax.swing.JFrame {
                     repeatlock = false;
 
                 }
+    
+                prefs.putBoolean("isdark", false);
                 Colorbar.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 Content.setForeground(Color.BLACK);
                 uptime.setIcon(new ImageIcon(main.class.getResource("uptime.png")));
@@ -591,12 +624,12 @@ public final class main extends javax.swing.JFrame {
     }//GEN-LAST:event_tbiMouseExited
 
     private void copyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_copyMouseClicked
-        if(theme==false){
-            ConfigurePictureBoxWH(copy, "check-light.png", "SMOOTH", 19,19,true); 
-        }else{
-            ConfigurePictureBoxWH(copy, "check-dark.png", "SMOOTH", 19,19,true);
+        if (theme == false) {
+            ConfigurePictureBoxWH(copy, "check-light.png", "SMOOTH", 19, 19, true);
+        } else {
+            ConfigurePictureBoxWH(copy, "check-dark.png", "SMOOTH", 19, 19, true);
         }
-        JAnimator chekani = new JAnimator(copy,30,0,JAnimator.AnimationType.ZOOM,true);
+        JAnimator chekani = new JAnimator(copy, 30, 0, JAnimator.AnimationType.ZOOM, true);
         chekani.playIn();
         Rectangle contrect = reference.getContentPane().getBounds();
         Point p = reference.getContentPane().getLocationOnScreen();
@@ -644,19 +677,19 @@ public final class main extends javax.swing.JFrame {
             }
         } catch (AWTException ex) {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
-        new Thread(() ->{
-            try {
-                Thread.sleep(800);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
-            }
-           if(theme==false){
-           ConfigurePictureBoxWH(copy, "screenshot-light.png", "SMOOTH", 28,28,true);
-        }else{
-            ConfigurePictureBoxWH(copy, "screenshot-dark.png", "SMOOTH", 28,28,true);
-        }
-           }).start();
+        } finally {
+            new Thread(() -> {
+                try {
+                    Thread.sleep(800);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                if (theme == false) {
+                    ConfigurePictureBoxWH(copy, "screenshot-light.png", "SMOOTH", 28, 28, true);
+                } else {
+                    ConfigurePictureBoxWH(copy, "screenshot-dark.png", "SMOOTH", 28, 28, true);
+                }
+            }).start();
         }
     }//GEN-LAST:event_copyMouseClicked
 
