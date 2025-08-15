@@ -26,7 +26,7 @@ They are included **for informational and identification purposes only** and do 
 
 Copyright (c) 2025 AndronikosGl. All rights reserved.
 
-This repository contains proprietary code. You may view the code, but you **may not copy, modify, redistribute, or use it for commercial purposes** without explicit written permission from the copyright holder.
+This repository is licenced under the MIT Licence
 
 
 
