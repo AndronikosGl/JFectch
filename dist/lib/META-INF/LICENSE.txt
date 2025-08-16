@@ -1,0 +1,7 @@
+/*
+ * janimator - UI transitions library
+ * Copyright (c) 2025 YourName. All rights reserved.
+ *
+ * This library is proprietary. Redistribution or modification is not permitted
+ * without explicit permission from the author.
+ */
