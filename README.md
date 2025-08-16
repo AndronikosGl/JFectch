@@ -19,14 +19,13 @@ This app supports most Linux distros as well as FreeBSD, NetBSD, OpenBSD and Ora
 <img src="screenshots/Light.png" alt="Light mode screenshot" width="600"/>
 <img src="screenshots/Toggle.png" alt="Mix screenshot" width="600"/>   <img src="screenshots/save.png" alt="SCreenshot button screenshot" width="600"/>
 
+
 ## Trademark Notice
 
 All distribution logos included in this project are the property of their respective owners. 
 They are included **for informational and identification purposes only** and do not imply endorsement or sponsorship by the respective trademark owners.
 
-Copyright (c) 2025 AndronikosGl. All rights reserved.
-
-This repository is licenced under the MIT Licence
+This repository is licenced under the MIT Licence and does not cover any logos seen in this project.
 
 
 
