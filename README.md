@@ -30,6 +30,7 @@ To run jfetch, use `cd dist` and then `java -jar JFetch.jar`
 2) JFetch requires execution permition to run
 - You will have to use `chmod +x JFetch.jar` to give it permition to run
 
+## 
 Copyright (c) 2025 AndronikosGl. All rights reserved.
 
 This repository contains proprietary code. You may view the code, but you **may not copy, modify, redistribute, or use it for commercial purposes** without explicit written permission from the copyright holder.
