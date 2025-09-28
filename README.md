@@ -29,7 +29,7 @@ If it gives off any type of error such as `/bin/bash not found`
 - You will need to copy the bash binary from its original place to /bin and re run the project or create a symbolic link `ln -s /usr/local/bin/bash /bin/bash`
 - You will need to make sure bash is installed on your system
 
-**2) JFetch requires execution permission to run**
+**2) JFetch requires execution permission to run**<br>
 You will have to use `chmod +x JFetch.jar` to give it permission to run
 
 ## 
