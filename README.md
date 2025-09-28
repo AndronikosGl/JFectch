@@ -19,7 +19,14 @@ This app supports most Linux distros as well as FreeBSD, NetBSD, OpenBSD and Ora
 <img src="screenshots/Light.png" alt="Light mode screenshot" width="600"/>
 <img src="screenshots/Toggle.png" alt="Mix screenshot" width="600"/>   <img src="screenshots/save.png" alt="SCreenshot button screenshot" width="600"/>
 
+## Running project
+To run jfetch, use `cd dist` and then `java -jar JFetch.jar`
 
+## Common problem
+JFetch relies on bash to fetch some information from your system. If it gives off any type of error such as `/bin/bash not found`
+## Solution
+- You will need to copy the bash binary from its original place to /bin and re run the project or create a symbolic link
+- YOu will need to make sure bash is installed on your system
 
 Copyright (c) 2025 AndronikosGl. All rights reserved.
 
