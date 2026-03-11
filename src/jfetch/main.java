@@ -127,6 +127,8 @@ public final class main extends javax.swing.JFrame {
                 logo.setIcon(new ImageIcon(main.class.getResource("distrologos/cent.png")));
             } else if (osname.toLowerCase().contains("deepin")) {
                 logo.setIcon(new ImageIcon(main.class.getResource("distrologos/antix.png")));
+            } else if (osname.toLowerCase().contains("debian")) {
+                logo.setIcon(new ImageIcon(main.class.getResource("distrologos/antix.png")));
             } else if (osname.toLowerCase().contains("edubuntu")) {
                 logo.setIcon(new ImageIcon(main.class.getResource("distrologos/edubuntu.png")));
             } else if (osname.toLowerCase().contains("elementary")) {
@@ -236,9 +238,9 @@ public final class main extends javax.swing.JFrame {
             BufferedReader buff2 = new BufferedReader(new InputStreamReader(cpu.getInputStream()));
             info[6] = buff2.readLine().trim();
             Process btime;
-
             btime = Runtime.getRuntime().exec(new String[]{
-                "sh", "-c", "systemd-analyze | grep 'Startup finished in' | sed -E 's/.*= ([0-9]+)(\\.[0-9]+)?s.*/\\1/'"
+                "sh", "-c",
+                "systemd-analyze | sed -n 's/.*= //p' | awk '{m=($1~/min/)?$1+0:0; s=($1~/min/)?$2:$1; sub(\"s\",\"\",s); printf \"%.0f\\n\", m*60+s}'"
             });
             BufferedReader buff3 = new BufferedReader(new InputStreamReader(btime.getInputStream()));
             info[7] = buff3.readLine();
@@ -310,17 +312,7 @@ public final class main extends javax.swing.JFrame {
             getContentPane().setBackground(new Color(244, 244, 244));
             tbi.setIcon(dark);
         }
-        pack(); // let Swing calculate preferred sizes
-
-// Get actual window decorations
-        Insets insets = getInsets(); // top, bottom, left, right
-
-// Calculate total height for window
-        int desiredHeight = Colorbar.getY() + Colorbar.getHeight() + 20; // content padding
-        desiredHeight += insets.top + insets.bottom; // add title bar + borders
-
-        setSize(617, desiredHeight);
-        setMinimumSize(new Dimension(617, desiredHeight));
+       
         this.setIconImage(new ImageIcon(main.class.getResource("icon.png")).getImage());
         setDistroLogo();
         Content.setText("<html>"
@@ -333,8 +325,7 @@ public final class main extends javax.swing.JFrame {
                 + "<p style='margin: 0 0 5px 0;'><b>CPU:</b> " + ReturnInfo()[6] + "</p>"
                 + "<p style='margin: 0 0 5px 0;'><b>Disk:</b> " + ReturnInfo()[8] + "</p>"
                 + "</html>");
-        JAnimator ani1 = new JAnimator(Content, 10, 0, JAnimator.AnimationType.FADE, true);
-        ani1.playIn();
+ 
         HoverEffect.hide();
         HoverEffect2.hide();
         InputStream fontfile = main.class.getResourceAsStream("7seg.ttf");
@@ -344,7 +335,7 @@ public final class main extends javax.swing.JFrame {
         Font seg14ttf = Font.createFont(Font.TRUETYPE_FONT, fontforC).deriveFont(20f);
         GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(seg14ttf);
         uptime.setFont(seg7ttf); // still set for layout sizing etc.
-        var bootdur = Integer.parseInt(ReturnInfo()[7]);
+        var bootdur = (int) Math.round(Double.parseDouble(ReturnInfo()[7].replaceAll("[^0-9.]", "")));
 
         Timer aniend = new Timer(310, new ActionListener() {
             int i = 0;
@@ -445,22 +436,53 @@ public final class main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        copy = new javax.swing.JLabel();
+        Colorbar = new javax.swing.JLabel();
         uptime = new javax.swing.JLabel();
         separator = new javax.swing.JLabel();
-        copy = new javax.swing.JLabel();
         HoverEffect2 = new javax.swing.JLabel();
-        Content = new javax.swing.JLabel();
-        Colorbar = new javax.swing.JLabel();
         tbi = new javax.swing.JLabel();
         HoverEffect = new javax.swing.JLabel();
+        Content = new javax.swing.JLabel();
         logo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("jfetch 1.0");
         setBackground(new java.awt.Color(51, 51, 51));
+        setLocation(new java.awt.Point(50, 50));
         setLocationByPlatform(true);
         setResizable(false);
-        getContentPane().setLayout(null);
+
+        jPanel1.setOpaque(false);
+        jPanel1.setLayout(null);
+
+        copy.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        copy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jfetch/screenshot-light.png"))); // NOI18N
+        copy.setToolTipText("Copy results");
+        copy.setDoubleBuffered(true);
+        copy.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                copyMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                copyMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                copyMouseExited(evt);
+            }
+        });
+        jPanel1.add(copy);
+        copy.setBounds(50, 10, 40, 40);
+
+        Colorbar.setFont(new java.awt.Font("Serif", 1, 18)); // NOI18N
+        Colorbar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Colorbar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jfetch/colorbar.png"))); // NOI18N
+        Colorbar.setToolTipText("");
+        Colorbar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Colorbar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel1.add(Colorbar);
+        Colorbar.setBounds(260, 10, 330, 41);
 
         uptime.setFont(new java.awt.Font("DS-Digital", 0, 27)); // NOI18N
         uptime.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -478,51 +500,18 @@ public final class main extends javax.swing.JFrame {
                 uptimeMouseExited(evt);
             }
         });
-        getContentPane().add(uptime);
-        uptime.setBounds(130, 290, 130, 40);
+        jPanel1.add(uptime);
+        uptime.setBounds(120, 10, 230, 40);
 
         separator.setFont(new java.awt.Font("Inter Light", 0, 24)); // NOI18N
         separator.setForeground(new java.awt.Color(153, 153, 153));
         separator.setText("|");
-        getContentPane().add(separator);
-        separator.setBounds(113, 290, 10, 40);
-
-        copy.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        copy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jfetch/screenshot-light.png"))); // NOI18N
-        copy.setToolTipText("Copy results");
-        copy.setDoubleBuffered(true);
-        copy.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                copyMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                copyMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                copyMouseExited(evt);
-            }
-        });
-        getContentPane().add(copy);
-        copy.setBounds(65, 290, 40, 40);
+        jPanel1.add(separator);
+        separator.setBounds(100, 10, 50, 40);
 
         HoverEffect2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jfetch/hoverlight.png"))); // NOI18N
-        getContentPane().add(HoverEffect2);
-        HoverEffect2.setBounds(65, 290, 40, 40);
-
-        Content.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        Content.setText("Please wait...");
-        Content.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        getContentPane().add(Content);
-        Content.setBounds(215, 21, 400, 240);
-
-        Colorbar.setFont(new java.awt.Font("Serif", 1, 18)); // NOI18N
-        Colorbar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Colorbar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jfetch/colorbar.png"))); // NOI18N
-        Colorbar.setToolTipText("");
-        Colorbar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Colorbar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        getContentPane().add(Colorbar);
-        Colorbar.setBounds(270, 290, 330, 41);
+        jPanel1.add(HoverEffect2);
+        HoverEffect2.setBounds(50, 10, 40, 40);
 
         tbi.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         tbi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jfetch/dark.png"))); // NOI18N
@@ -538,16 +527,46 @@ public final class main extends javax.swing.JFrame {
                 tbiMouseExited(evt);
             }
         });
-        getContentPane().add(tbi);
-        tbi.setBounds(20, 290, 40, 40);
+        jPanel1.add(tbi);
+        tbi.setBounds(10, 10, 40, 40);
 
         HoverEffect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jfetch/hoverlight.png"))); // NOI18N
-        getContentPane().add(HoverEffect);
-        HoverEffect.setBounds(20, 290, 40, 40);
+        jPanel1.add(HoverEffect);
+        HoverEffect.setBounds(10, 10, 40, 40);
+
+        Content.setBackground(new java.awt.Color(255, 51, 51));
+        Content.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        Content.setText("Please wait...");
+        Content.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jfetch/distrologos/zorin.png"))); // NOI18N
-        getContentPane().add(logo);
-        logo.setBounds(17, 21, 190, 190);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8)
+                .addComponent(Content, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6))
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 610, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(Content, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -778,6 +797,7 @@ public final class main extends javax.swing.JFrame {
     private javax.swing.JLabel HoverEffect;
     private javax.swing.JLabel HoverEffect2;
     private javax.swing.JLabel copy;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel logo;
     private javax.swing.JLabel separator;
     private javax.swing.JLabel tbi;
