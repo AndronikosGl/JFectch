@@ -444,8 +444,9 @@ public final class main extends javax.swing.JFrame {
         HoverEffect2 = new javax.swing.JLabel();
         tbi = new javax.swing.JLabel();
         HoverEffect = new javax.swing.JLabel();
-        Content = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
         logo = new javax.swing.JLabel();
+        Content = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("jfetch 1.0");
@@ -454,6 +455,7 @@ public final class main extends javax.swing.JFrame {
         setLocationByPlatform(true);
         setResizable(false);
 
+        jPanel1.setMinimumSize(new java.awt.Dimension(0, 71));
         jPanel1.setOpaque(false);
         jPanel1.setLayout(null);
 
@@ -473,7 +475,7 @@ public final class main extends javax.swing.JFrame {
             }
         });
         jPanel1.add(copy);
-        copy.setBounds(50, 10, 40, 40);
+        copy.setBounds(60, 15, 40, 40);
 
         Colorbar.setFont(new java.awt.Font("Serif", 1, 18)); // NOI18N
         Colorbar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -482,7 +484,7 @@ public final class main extends javax.swing.JFrame {
         Colorbar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Colorbar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jPanel1.add(Colorbar);
-        Colorbar.setBounds(260, 10, 330, 41);
+        Colorbar.setBounds(270, 15, 330, 41);
 
         uptime.setFont(new java.awt.Font("DS-Digital", 0, 27)); // NOI18N
         uptime.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -501,17 +503,17 @@ public final class main extends javax.swing.JFrame {
             }
         });
         jPanel1.add(uptime);
-        uptime.setBounds(120, 10, 230, 40);
+        uptime.setBounds(130, 15, 230, 40);
 
         separator.setFont(new java.awt.Font("Inter Light", 0, 24)); // NOI18N
         separator.setForeground(new java.awt.Color(153, 153, 153));
         separator.setText("|");
         jPanel1.add(separator);
-        separator.setBounds(100, 10, 50, 40);
+        separator.setBounds(110, 15, 50, 40);
 
         HoverEffect2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jfetch/hoverlight.png"))); // NOI18N
         jPanel1.add(HoverEffect2);
-        HoverEffect2.setBounds(50, 10, 40, 40);
+        HoverEffect2.setBounds(60, 15, 40, 40);
 
         tbi.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         tbi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jfetch/dark.png"))); // NOI18N
@@ -528,44 +530,37 @@ public final class main extends javax.swing.JFrame {
             }
         });
         jPanel1.add(tbi);
-        tbi.setBounds(10, 10, 40, 40);
+        tbi.setBounds(20, 15, 40, 40);
 
         HoverEffect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jfetch/hoverlight.png"))); // NOI18N
         jPanel1.add(HoverEffect);
-        HoverEffect.setBounds(10, 10, 40, 40);
+        HoverEffect.setBounds(20, 15, 40, 40);
+
+        jPanel2.setOpaque(false);
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jfetch/distrologos/zorin.png"))); // NOI18N
+        jPanel2.add(logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(17, 21, 190, 190));
 
         Content.setBackground(new java.awt.Color(255, 51, 51));
         Content.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         Content.setText("Please wait...");
         Content.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-
-        logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jfetch/distrologos/zorin.png"))); // NOI18N
+        jPanel2.add(Content, new org.netbeans.lib.awtextra.AbsoluteConstraints(215, 21, 400, 250));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(8, 8, 8)
-                .addComponent(Content, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6))
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 610, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(Content, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -798,6 +793,7 @@ public final class main extends javax.swing.JFrame {
     private javax.swing.JLabel HoverEffect2;
     private javax.swing.JLabel copy;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel logo;
     private javax.swing.JLabel separator;
     private javax.swing.JLabel tbi;
