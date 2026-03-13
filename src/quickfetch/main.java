@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package jfetch;
+package quickfetch;
 
 import java.awt.Color;
 import java.util.logging.Level;
@@ -57,6 +57,7 @@ import java.util.prefs.Preferences;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -128,7 +129,7 @@ public final class main extends javax.swing.JFrame {
             } else if (osname.toLowerCase().contains("deepin")) {
                 logo.setIcon(new ImageIcon(main.class.getResource("distrologos/antix.png")));
             } else if (osname.toLowerCase().contains("debian")) {
-                logo.setIcon(new ImageIcon(main.class.getResource("distrologos/antix.png")));
+                logo.setIcon(new ImageIcon(main.class.getResource("distrologos/debian.png")));
             } else if (osname.toLowerCase().contains("edubuntu")) {
                 logo.setIcon(new ImageIcon(main.class.getResource("distrologos/edubuntu.png")));
             } else if (osname.toLowerCase().contains("elementary")) {
@@ -281,13 +282,38 @@ public final class main extends javax.swing.JFrame {
         info[8] = String.valueOf(free) + "GB/" + String.valueOf(total) + "GB (" + percentUsed + "% full)";
         return info;
     }
-
-    public void animateDarkLight(boolean direction) {
-
+    
+    void fadeIntext(boolean islight){
+       
+        if(islight==false){
+        AtomicInteger opmax = new AtomicInteger(242);
+            new javax.swing.Timer(10, e -> {   
+                if (opmax.get() >= 20) {
+                    opmax.addAndGet(-20);
+                    //repaint();
+                } else {
+                    ((javax.swing.Timer) e.getSource()).stop();        
+                }
+                Content.setForeground(new Color(opmax.get(), opmax.get(), opmax.get()));
+            }).start();
+        }else{
+          AtomicInteger opmin = new AtomicInteger(34);
+            new javax.swing.Timer(10, e -> {   
+                if (opmin.get() <= 240) {
+                    opmin.addAndGet(20);
+                    
+                } else {
+                    ((javax.swing.Timer) e.getSource()).stop();        
+                }
+                Content.setForeground(new Color(opmin.get(), opmin.get(), opmin.get()));
+            }).start();  
+        }
     }
+
 
     public main() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException, IOException, MalformedObjectNameException, MBeanException, AttributeNotFoundException, InstanceNotFoundException, ReflectionException, FontFormatException {
         initComponents();
+        System.out.println(this.getSize());
         theme = prefs.getBoolean("isdark", false);
         getContentPane().setBackground(new Color(242, 242, 242));
         if (theme == true) {
@@ -312,8 +338,9 @@ public final class main extends javax.swing.JFrame {
             getContentPane().setBackground(new Color(244, 244, 244));
             tbi.setIcon(dark);
         }
-       
+       Content.setForeground(getContentPane().getBackground());
         this.setIconImage(new ImageIcon(main.class.getResource("icon.png")).getImage());
+        this.setLocationRelativeTo(null);
         setDistroLogo();
         Content.setText("<html>"
                 + "<p style='margin: 0 0 5px 0;'><b>OS:</b> " + ReturnInfo()[0] + "</p>"
@@ -325,7 +352,7 @@ public final class main extends javax.swing.JFrame {
                 + "<p style='margin: 0 0 5px 0;'><b>CPU:</b> " + ReturnInfo()[6] + "</p>"
                 + "<p style='margin: 0 0 5px 0;'><b>Disk:</b> " + ReturnInfo()[8] + "</p>"
                 + "</html>");
- 
+        SwingUtilities.invokeLater(() -> fadeIntext(theme));
         HoverEffect.hide();
         HoverEffect2.hide();
         InputStream fontfile = main.class.getResourceAsStream("7seg.ttf");
@@ -336,7 +363,7 @@ public final class main extends javax.swing.JFrame {
         GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(seg14ttf);
         uptime.setFont(seg7ttf); // still set for layout sizing etc.
         var bootdur = (int) Math.round(Double.parseDouble(ReturnInfo()[7].replaceAll("[^0-9.]", "")));
-
+        
         Timer aniend = new Timer(310, new ActionListener() {
             int i = 0;
 
@@ -367,6 +394,7 @@ public final class main extends javax.swing.JFrame {
 
             }
         });
+        
         new Timer(50, new ActionListener() {
             int i = 0;
 
@@ -423,6 +451,7 @@ public final class main extends javax.swing.JFrame {
                     Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+          
         }).start();
 
     }
@@ -449,10 +478,11 @@ public final class main extends javax.swing.JFrame {
         Content = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("jfetch 1.0");
+        setTitle("Quick Fetch");
         setBackground(new java.awt.Color(51, 51, 51));
         setLocation(new java.awt.Point(50, 50));
         setLocationByPlatform(true);
+        setMinimumSize(new java.awt.Dimension(624, 403));
         setResizable(false);
 
         jPanel1.setMinimumSize(new java.awt.Dimension(0, 71));
@@ -460,7 +490,7 @@ public final class main extends javax.swing.JFrame {
         jPanel1.setLayout(null);
 
         copy.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        copy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jfetch/screenshot-light.png"))); // NOI18N
+        copy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quickfetch/screenshot-light.png"))); // NOI18N
         copy.setToolTipText("Copy results");
         copy.setDoubleBuffered(true);
         copy.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -479,7 +509,7 @@ public final class main extends javax.swing.JFrame {
 
         Colorbar.setFont(new java.awt.Font("Serif", 1, 18)); // NOI18N
         Colorbar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        Colorbar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jfetch/colorbar.png"))); // NOI18N
+        Colorbar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quickfetch/colorbar.png"))); // NOI18N
         Colorbar.setToolTipText("");
         Colorbar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Colorbar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -488,7 +518,7 @@ public final class main extends javax.swing.JFrame {
 
         uptime.setFont(new java.awt.Font("DS-Digital", 0, 27)); // NOI18N
         uptime.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        uptime.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jfetch/uptime.png"))); // NOI18N
+        uptime.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quickfetch/uptime.png"))); // NOI18N
         uptime.setText("-- SEC");
         uptime.setToolTipText("Boot time");
         uptime.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -511,12 +541,12 @@ public final class main extends javax.swing.JFrame {
         jPanel1.add(separator);
         separator.setBounds(110, 15, 50, 40);
 
-        HoverEffect2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jfetch/hoverlight.png"))); // NOI18N
+        HoverEffect2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quickfetch/hoverlight.png"))); // NOI18N
         jPanel1.add(HoverEffect2);
         HoverEffect2.setBounds(60, 15, 40, 40);
 
         tbi.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        tbi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jfetch/dark.png"))); // NOI18N
+        tbi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quickfetch/dark.png"))); // NOI18N
         tbi.setToolTipText("Theme toggle");
         tbi.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -532,14 +562,15 @@ public final class main extends javax.swing.JFrame {
         jPanel1.add(tbi);
         tbi.setBounds(20, 15, 40, 40);
 
-        HoverEffect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jfetch/hoverlight.png"))); // NOI18N
+        HoverEffect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quickfetch/hoverlight.png"))); // NOI18N
         jPanel1.add(HoverEffect);
         HoverEffect.setBounds(20, 15, 40, 40);
 
+        jPanel2.setMinimumSize(new java.awt.Dimension(615, 271));
         jPanel2.setOpaque(false);
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jfetch/distrologos/zorin.png"))); // NOI18N
+        logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quickfetch/linux.png"))); // NOI18N
         jPanel2.add(logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(17, 21, 190, 190));
 
         Content.setBackground(new java.awt.Color(255, 51, 51));
@@ -552,15 +583,16 @@ public final class main extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 624, Short.MAX_VALUE)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(13, 13, 13)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8))
         );
 
         pack();
