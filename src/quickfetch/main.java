@@ -65,6 +65,7 @@ import javax.swing.SwingUtilities;
  */
 public final class main extends javax.swing.JFrame {
 
+    boolean forbidani = false;
     JFrame reference;
     boolean theme = false; //Theme
     Preferences prefs = Preferences.userNodeForPackage(main.class);
@@ -282,38 +283,40 @@ public final class main extends javax.swing.JFrame {
         info[8] = String.valueOf(free) + "GB/" + String.valueOf(total) + "GB (" + percentUsed + "% full)";
         return info;
     }
-    
-    void fadeIntext(boolean islight){
-       
-        if(islight==false){
-        AtomicInteger opmax = new AtomicInteger(242);
-            new javax.swing.Timer(10, e -> {   
+
+    void fadeIntext(boolean islight) {
+
+        if (islight == false) {
+            AtomicInteger opmax = new AtomicInteger(242);
+            new javax.swing.Timer(10, e -> {
                 if (opmax.get() >= 20) {
                     opmax.addAndGet(-20);
                     //repaint();
                 } else {
-                    ((javax.swing.Timer) e.getSource()).stop();        
+                    ((javax.swing.Timer) e.getSource()).stop();
                 }
                 Content.setForeground(new Color(opmax.get(), opmax.get(), opmax.get()));
             }).start();
-        }else{
-          AtomicInteger opmin = new AtomicInteger(34);
-            new javax.swing.Timer(10, e -> {   
+        } else {
+            AtomicInteger opmin = new AtomicInteger(34);
+            new javax.swing.Timer(10, e -> {
                 if (opmin.get() <= 240) {
                     opmin.addAndGet(20);
-                    
+
                 } else {
-                    ((javax.swing.Timer) e.getSource()).stop();        
+                    ((javax.swing.Timer) e.getSource()).stop();
                 }
                 Content.setForeground(new Color(opmin.get(), opmin.get(), opmin.get()));
-            }).start();  
+            }).start();
         }
     }
 
-
-    public main() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException, IOException, MalformedObjectNameException, MBeanException, AttributeNotFoundException, InstanceNotFoundException, ReflectionException, FontFormatException {
+    public main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException, IOException, MalformedObjectNameException, MBeanException, AttributeNotFoundException, InstanceNotFoundException, ReflectionException, FontFormatException {
         initComponents();
-        System.out.println(this.getSize());
+        if (args.length > 0 && "-noani".equals(args[0])) {
+            forbidani = true;
+        }
+        
         theme = prefs.getBoolean("isdark", false);
         getContentPane().setBackground(new Color(242, 242, 242));
         if (theme == true) {
@@ -338,7 +341,10 @@ public final class main extends javax.swing.JFrame {
             getContentPane().setBackground(new Color(244, 244, 244));
             tbi.setIcon(dark);
         }
-       Content.setForeground(getContentPane().getBackground());
+        if (forbidani == false) {
+            Content.setForeground(getContentPane().getBackground());
+        }
+
         this.setIconImage(new ImageIcon(main.class.getResource("icon.png")).getImage());
         this.setLocationRelativeTo(null);
         setDistroLogo();
@@ -352,7 +358,9 @@ public final class main extends javax.swing.JFrame {
                 + "<p style='margin: 0 0 5px 0;'><b>CPU:</b> " + ReturnInfo()[6] + "</p>"
                 + "<p style='margin: 0 0 5px 0;'><b>Disk:</b> " + ReturnInfo()[8] + "</p>"
                 + "</html>");
-        SwingUtilities.invokeLater(() -> fadeIntext(theme));
+        if (forbidani == false) {
+            SwingUtilities.invokeLater(() -> fadeIntext(theme));
+        }
         HoverEffect.hide();
         HoverEffect2.hide();
         InputStream fontfile = main.class.getResourceAsStream("7seg.ttf");
@@ -363,96 +371,110 @@ public final class main extends javax.swing.JFrame {
         GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(seg14ttf);
         uptime.setFont(seg7ttf); // still set for layout sizing etc.
         var bootdur = (int) Math.round(Double.parseDouble(ReturnInfo()[7].replaceAll("[^0-9.]", "")));
-        
-        Timer aniend = new Timer(310, new ActionListener() {
-            int i = 0;
+        if (forbidani == false) {
+            Timer aniend = new Timer(310, new ActionListener() {
+                int i = 0;
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (String.valueOf(bootdur).startsWith("1")) {
-                    uptime.setIconTextGap(-3); // tweak this as needed
-                } else {
-                    uptime.setIconTextGap(9);
-                }
-                if (i <= 3) {
-                    if (i % 2 == 1) {
-                        uptime.setText("<html>"
-                                + "<span style='font-family:\"" + seg7ttf.getFontName() + "\"; font-size:20pt;'>"
-                                + bootdur + " 5E</span>"
-                                + "<span style='font-family:\"" + seg14ttf.getFontName() + "\"; font-size:20pt;'>C</span>"
-                                + "</html>");
-                        uptime.repaint();
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (String.valueOf(bootdur).startsWith("1")) {
+                        uptime.setIconTextGap(-3); // tweak this as needed
                     } else {
-                        uptime.setText("");
-                        uptime.repaint();
+                        uptime.setIconTextGap(9);
                     }
-                    i++;
-
-                } else {
-                    ((Timer) e.getSource()).stop();
-                }
-
-            }
-        });
-        
-        new Timer(50, new ActionListener() {
-            int i = 0;
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    if (ReturnInfo()[7].equals("0")) {
-                        uptime.setText("<html>"
-                                + "<span style='font-family:\"" + "sans-serif" + "\"; font-size:14pt; font-weight:bold;'>"
-                                + "&nbsp;Unavailable" + " </span>"
-                                + "<span style='font-family:\"" + seg14ttf.getFontName() + "\"; font-size:20pt;'></span>"
-                                + "</html>");
-                        ((Timer) e.getSource()).stop();
-                    } else {
-                        if (i <= bootdur) {
-                            if (String.valueOf(i).startsWith("1")) {
-                                uptime.setIconTextGap(-3); // tweak this as needed
-                            } else {
-                                uptime.setIconTextGap(9);
-                            }
+                    if (i <= 3) {
+                        if (i % 2 == 1) {
                             uptime.setText("<html>"
                                     + "<span style='font-family:\"" + seg7ttf.getFontName() + "\"; font-size:20pt;'>"
-                                    + i + " 5E</span>"
+                                    + bootdur + " 5E</span>"
                                     + "<span style='font-family:\"" + seg14ttf.getFontName() + "\"; font-size:20pt;'>C</span>"
                                     + "</html>");
                             uptime.repaint();
-                            if (bootdur <= 24) {
-                                i++;
-                            } else if (bootdur > 24 && bootdur < 40) {
-                                i += 2;
-                            } else if (bootdur > 40 && bootdur < 60) {
-                                i += 5;
-                            } else {
-                                i = bootdur;
-                            }
-
                         } else {
-                            aniend.start();
-
-                            ((Timer) e.getSource()).stop();
+                            uptime.setText("");
+                            uptime.repaint();
                         }
+                        i++;
+
+                    } else {
+                        ((Timer) e.getSource()).stop();
                     }
-                } catch (IOException ex) {
-                    Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (MalformedObjectNameException ex) {
-                    Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (MBeanException ex) {
-                    Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (AttributeNotFoundException ex) {
-                    Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InstanceNotFoundException ex) {
-                    Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ReflectionException ex) {
-                    Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+
                 }
+            });
+
+            new Timer(50, new ActionListener() {
+                int i = 0;
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        if (ReturnInfo()[7].equals("0")) {
+                            uptime.setText("<html>"
+                                    + "<span style='font-family:\"" + "sans-serif" + "\"; font-size:14pt; font-weight:bold;'>"
+                                    + "&nbsp;Unavailable" + " </span>"
+                                    + "<span style='font-family:\"" + seg14ttf.getFontName() + "\"; font-size:20pt;'></span>"
+                                    + "</html>");
+                            ((Timer) e.getSource()).stop();
+                        } else {
+                            if (i <= bootdur) {
+                                if (String.valueOf(i).startsWith("1")) {
+                                    uptime.setIconTextGap(-3); // tweak this as needed
+                                } else {
+                                    uptime.setIconTextGap(9);
+                                }
+                                uptime.setText("<html>"
+                                        + "<span style='font-family:\"" + seg7ttf.getFontName() + "\"; font-size:20pt;'>"
+                                        + i + " 5E</span>"
+                                        + "<span style='font-family:\"" + seg14ttf.getFontName() + "\"; font-size:20pt;'>C</span>"
+                                        + "</html>");
+                                uptime.repaint();
+                                if (bootdur <= 24) {
+                                    i++;
+                                } else if (bootdur > 24 && bootdur < 40) {
+                                    i += 2;
+                                } else if (bootdur > 40 && bootdur < 60) {
+                                    i += 5;
+                                } else {
+                                    i = bootdur;
+                                }
+
+                            } else {
+                                aniend.start();
+
+                                ((Timer) e.getSource()).stop();
+                            }
+                        }
+                    } catch (IOException ex) {
+                        Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (MalformedObjectNameException ex) {
+                        Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (MBeanException ex) {
+                        Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (AttributeNotFoundException ex) {
+                        Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (InstanceNotFoundException ex) {
+                        Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ReflectionException ex) {
+                        Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+            }).start();
+        } else {
+            // No animation: show final boot duration instantly
+            if (String.valueOf(bootdur).startsWith("1")) {
+                uptime.setIconTextGap(-3);
+            } else {
+                uptime.setIconTextGap(9);
             }
-          
-        }).start();
+
+            uptime.setText("<html>"
+                    + "<span style='font-family:\"" + seg7ttf.getFontName() + "\"; font-size:20pt;'>"
+                    + bootdur + " 5E</span>"
+                    + "<span style='font-family:\"" + seg14ttf.getFontName() + "\"; font-size:20pt;'>C</span>"
+                    + "</html>");
+        }
 
     }
 
@@ -687,8 +709,12 @@ public final class main extends javax.swing.JFrame {
         } else {
             ConfigurePictureBoxWH(copy, "check-dark.png", "SMOOTH", 19, 19, true);
         }
+        if(forbidani==false){
         JAnimator chekani = new JAnimator(copy, 30, 0, JAnimator.AnimationType.ZOOM, true);
         chekani.playIn();
+        }else{
+            copy.setVisible(true);
+        }
         Rectangle contrect = reference.getContentPane().getBounds();
         Point p = reference.getContentPane().getLocationOnScreen();
         Rectangle rect = new Rectangle(p, contrect.getSize());
@@ -790,7 +816,7 @@ public final class main extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    new main().setVisible(true);
+                    new main(args).setVisible(true);
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (InstantiationException ex) {
