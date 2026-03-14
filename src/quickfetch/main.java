@@ -506,6 +506,7 @@ public final class main extends javax.swing.JFrame {
         setLocation(new java.awt.Point(50, 50));
         setLocationByPlatform(true);
         setMinimumSize(new java.awt.Dimension(624, 403));
+        setResizable(false);
 
         jPanel1.setMinimumSize(new java.awt.Dimension(0, 71));
         jPanel1.setOpaque(false);
