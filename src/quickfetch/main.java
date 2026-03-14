@@ -310,13 +310,14 @@ public final class main extends javax.swing.JFrame {
             }).start();
         }
     }
-
+    
     public main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException, IOException, MalformedObjectNameException, MBeanException, AttributeNotFoundException, InstanceNotFoundException, ReflectionException, FontFormatException {
+
         initComponents();
         if (args.length > 0 && "-noani".equals(args[0])) {
             forbidani = true;
         }
-        
+
         theme = prefs.getBoolean("isdark", false);
         getContentPane().setBackground(new Color(242, 242, 242));
         if (theme == true) {
@@ -505,7 +506,6 @@ public final class main extends javax.swing.JFrame {
         setLocation(new java.awt.Point(50, 50));
         setLocationByPlatform(true);
         setMinimumSize(new java.awt.Dimension(624, 403));
-        setResizable(false);
 
         jPanel1.setMinimumSize(new java.awt.Dimension(0, 71));
         jPanel1.setOpaque(false);
@@ -593,13 +593,13 @@ public final class main extends javax.swing.JFrame {
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/quickfetch/linux.png"))); // NOI18N
-        jPanel2.add(logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(17, 21, 190, 190));
+        jPanel2.add(logo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 190, 190));
 
         Content.setBackground(new java.awt.Color(255, 51, 51));
         Content.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         Content.setText("Please wait...");
         Content.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        jPanel2.add(Content, new org.netbeans.lib.awtextra.AbsoluteConstraints(215, 21, 400, 250));
+        jPanel2.add(Content, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 15, 400, 250));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -611,10 +611,10 @@ public final class main extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(13, 13, 13)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE)
+                .addGap(15, 15, 15)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(8, 8, 8))
+                .addContainerGap())
         );
 
         pack();
@@ -633,6 +633,7 @@ public final class main extends javax.swing.JFrame {
     }//GEN-LAST:event_uptimeMouseClicked
 
     private void tbiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbiMouseClicked
+        if(forbidani == false){
         if (!repeatlock && theme == false) {
             AtomicInteger opmax = new AtomicInteger(242);
             repeatlock = true;
@@ -693,6 +694,35 @@ public final class main extends javax.swing.JFrame {
 
             }).start();
         }
+        }else{
+            if(theme==false){
+                HoverEffect.setIcon(darkh);
+                HoverEffect2.setIcon(darkh);
+                prefs.putBoolean("isdark", true);
+                Colorbar.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+                Content.setForeground(Color.WHITE);
+                uptime.setIcon(new ImageIcon(main.class.getResource("uptime-dark.png")));
+                copy.setIcon(new ImageIcon(main.class.getResource("screenshot-dark.png")));
+                uptime.setForeground(Color.white);
+                theme = true;
+                tbi.setIcon(light);
+                getContentPane().setBackground(new Color(34, 34,34));
+
+            }else{
+                HoverEffect.setIcon(lighth);
+                HoverEffect2.setIcon(lighth);
+                tbi.setIcon(dark);
+                prefs.putBoolean("isdark", false);
+                Colorbar.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                Content.setForeground(Color.BLACK);
+                uptime.setIcon(new ImageIcon(main.class.getResource("uptime.png")));
+                copy.setIcon(new ImageIcon(main.class.getResource("screenshot-light.png")));
+                uptime.setForeground(Color.black);
+                theme = false;
+                getContentPane().setBackground(new Color(244, 244, 244));
+
+            }
+        }
     }//GEN-LAST:event_tbiMouseClicked
 
     private void tbiMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbiMouseEntered
@@ -709,10 +739,10 @@ public final class main extends javax.swing.JFrame {
         } else {
             ConfigurePictureBoxWH(copy, "check-dark.png", "SMOOTH", 19, 19, true);
         }
-        if(forbidani==false){
-        JAnimator chekani = new JAnimator(copy, 30, 0, JAnimator.AnimationType.ZOOM, true);
-        chekani.playIn();
-        }else{
+        if (forbidani == false) {
+            JAnimator chekani = new JAnimator(copy, 30, 0, JAnimator.AnimationType.ZOOM, true);
+            chekani.playIn();
+        } else {
             copy.setVisible(true);
         }
         Rectangle contrect = reference.getContentPane().getBounds();
