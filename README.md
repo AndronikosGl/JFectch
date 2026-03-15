@@ -17,7 +17,7 @@ This app supports most Linux distros as well as FreeBSD, NetBSD, OpenBSD and Ora
 
 
 <img src="screenshots/Light.png" alt="Light mode screenshot" width="600"/>
-<img src="screenshots/Toggle.png" alt="Mix screenshot" width="600"/>   <img src="screenshots/save.png" alt="SCreenshot button screenshot" width="600"/>
+<img src="screenshots/Toggle.png" alt="Mix screenshot" width="600"/>   <img src="screenshots/save.png?v=2" alt="SCreenshot button screenshot" width="600"/>
 
 ## Running project
 To run quickfetch, use `cd dist` and then `java -jar quickfetch.jar`
